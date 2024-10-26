@@ -1,0 +1,12 @@
+{
+  "name": "netfilx-ui-with-next-js",
+  "version": "1.0.0",
+  "description": "NetflixUi With Next Js",
+  "main": "index.js",
+  "scripts": {
+    "exec": "node index.js "
+  },
+  "author": "Abhin",
+  "license": "ISC",
+  "type": "module"
+}

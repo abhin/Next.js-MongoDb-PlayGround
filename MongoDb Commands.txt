@@ -1,0 +1,61 @@
+Mongo DB Commands
+
+1. Creates a new user for the database on which the method is run. db.createUser() returns a duplicate user error if the user already exists on the database. https://www.mongodb.com/docs/manual/reference/method/db.createUser/#mongodb-method-db.createUser
+db.createUser(
+   {
+     user: "root",
+     pwd: "root",
+     roles: [ "readWrite", "dbAdmin" ]
+   }
+)
+
+
+db.auth("root","root")
+use <db name>
+db.dropDatabase()
+db.createCollection(‘<name>’)
+db.<collection>.insertOne({<filedName>: <value>, …})
+db.<collection>.drop()
+db.<collection>.find()
+db.<collection>.find().sort(<{fielName:1}>) // Sort Ascending
+db.<collection>.find().sort(<{fielName:-1}>) // Sort Descending
+db.<collection>.find().limit(<number>)
+db.<collection>.find().sort(<{fielName:-1}>).limit(<number>) // sort and limit
+db.<collection>.find({<fieldName>: <value>, …}) // Data filtering
+db.<collection>.find({<fieldName>: <value>, …}, {<fileName: true/ false>, …}) Query and Projection Specific file with filter query
+
+db.students.updateMany({fulltime:{$exists: false}}, {$set:{fullTime:true}})
+db.students.find({name: {$ne:"Sandy"}})
+db.students.find({age: {$lt:27}})
+db.students.find({age: {$lte:27}})
+db.students.find({age: {$gt:27}})
+db.students.find({age: {$gte:27}})
+db.students.find({gpa: {$gte:3, $lte:4.5}})
+db.students.find({name: {$in:["Spongebob", "Patrick", "Sandy"]}})
+db.students.find({name: {$nin:["Spongebob", "Patrick", "Sandy"]}})
+db.students.find({$and: [{fullTime: true}, {age:{$lte:22}}]})
+db.students.find({$or: [{fullTime: true}, {age:{$lte:22}}]})
+db.students.find({$nor: [{fullTime: true}, {age:{$lte:22}}]})
+db.students.find({age: {$not:{$gte:30}}})
+
+$set - set
+$unset
+$exists
+$ne -> not equal 
+$lt -> less than
+$lte  -> less than or equal to
+$gt -> Greater than 
+$gte -> Greater than or equal to
+$in -> IN operator
+$in -> NOT IN operator
+$and -> Logical Operater AND
+$or -> Logical Operater OR
+
+
+Indexing
+
+school> db.students.createIndex({name: 1})
+school> db.students.find({name: "Sandy"}).explain("executionStats")
+db.students.dropIndex("name_1")
+
+db.createCollection("teachers", {capped: true, size: 10000000, max: 100}, {autoIndexId: false})
