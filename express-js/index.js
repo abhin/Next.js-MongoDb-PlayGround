@@ -63,9 +63,60 @@ server.get("/api/v1/todos/read", (req, res) => {
     });
 });
 
-server.post("/api/v1/todos/update", (req, res) => {});
+server.put("/api/v1/todos/update", (req, res) => {
+  const { id, title, description, completed } = req.body;
 
-server.post("/api/v1/todos/delete", (req, res) => {});
+  if (!id) {
+    return res.status(400).json({
+      success: false,
+      message: "Todo ID is required",
+    });
+  }
+
+  Todos.findByIdAndUpdate(
+    id,
+    { title, description, completed },
+    { new: true, upsert: true, runValidators: true }
+  )
+    .then((data) => {
+      res.status(200).json({
+        success: true,
+        message: "Todo updated successfully",
+        data: data, // Returning updated data
+      });
+    })
+    .catch((err) => {
+      res.status(400).json({
+        success: false,
+        message: err.message || "An error occurred while updating the Todo",
+      });
+    });
+});
+
+server.get("/api/v1/todos/delete/:id", (req, res) => {
+  const { id } = req.params;
+
+  Todos.findByIdAndDelete(id)
+    .then((data) => {
+      if (data) {
+        res.status(200).json({
+          success: true,
+          message: "Todo deleted successfully",
+        });
+      } else {
+        res.status(404).json({
+          success: false,
+          message: "Todo does not exist",
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(400).json({
+        success: false,
+        message: err,
+      });
+    });
+});
 
 mongoose
   .connect(
